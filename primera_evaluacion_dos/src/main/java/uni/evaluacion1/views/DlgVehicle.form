@@ -33,7 +33,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="pnlContent.setLayout(new java.awt.BorderLayout());&#xd;&#xa;pnlVehicleController = new PnlVehicleController(pnlVehicle);&#xd;&#xa;pnlContent.add(pnlVehicle, BorderLayout.CENTER);&#xd;&#xa;"/>
+        <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="pnlContent.setLayout(new java.awt.BorderLayout());&#xd;&#xa;if(pnlVehicleController == null){&#xd;&#xa;pnlVehicle = new PnlVehicle();&#xd;&#xa;pnlVehicleController = new PnlVehicleController(pnlVehicle);&#xd;&#xa;}&#xd;&#xa;pnlContent.add(pnlVehicle, BorderLayout.CENTER);&#xd;&#xa;"/>
       </AuxValues>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">

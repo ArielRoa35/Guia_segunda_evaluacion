@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -204,26 +205,80 @@ public class PnlVehicleController {
         pnlVehicle.getRbtnAut().setSelected(true);
     }
     
-    public void updateVehicle(int index) throws IOException{
+    public PnlVehicle updateVehicle(int index) throws IOException{
         
         vehicles = jvdao.getAll().stream().collect(Collectors.toList());
         vehicle = vehicles.get(index);
         
+        int[] indexCombo = indexSearch(Integer.toString(vehicle.getYear()),vehicle.getMake(),vehicle.getModel(),vehicle.getInteriorColor(),vehicle.getExteriorColor());
+        
         pnlVehicle.getTxtStock().setText(Integer.toString(vehicle.getStockNumber()));
-        pnlVehicle.getCmbYear().setSelectedIndex(vehicle.getYear());
-        pnlVehicle.getCmbMake().setSelectedIndex(Integer.parseInt(vehicle.getMake()));
-        pnlVehicle.getCmbModel().setSelectedIndex(Integer.parseInt(vehicle.getModel()));
+        pnlVehicle.getCmbYear().setSelectedIndex(indexCombo[0]);
+        pnlVehicle.getCmbMake().setSelectedIndex(indexCombo[1]);
+        pnlVehicle.getCmbModel().setSelectedIndex(indexCombo[2]);
         pnlVehicle.getTxtStyle().setText(vehicle.getStyle());
         pnlVehicle.getFmtVin().setText(vehicle.getVin());
-        pnlVehicle.getCmbIColor().setSelectedIndex(Integer.parseInt(vehicle.getInteriorColor()));
-        pnlVehicle.getCmbEColor().setSelectedIndex(Integer.parseInt(vehicle.getExteriorColor()));
-        pnlVehicle.getSpnMiles().setValue(vehicle.getMiles());
-        pnlVehicle.getSpnPrice().setValue(vehicle.getPrice());
+        pnlVehicle.getCmbIColor().setSelectedIndex(indexCombo[3]);
+        pnlVehicle.getCmbEColor().setSelectedIndex(indexCombo[4]);
+        pnlVehicle.getSpnMiles().setValue((Object)Integer.parseInt(vehicle.getMiles()));
+        pnlVehicle.getSpnPrice().setValue((Object)vehicle.getPrice());
         pnlVehicle.getTxtEngine().setText(vehicle.getEngine());
         pnlVehicle.getTxtImage().setText(vehicle.getImage());
-        pnlVehicle.getCmbStatus().setSelectedIndex(Integer.parseInt(vehicle.getStatus()));
+        pnlVehicle.getCmbStatus().setSelectedIndex(vehicle.getStatus().equalsIgnoreCase("active") ? 0 : vehicle.getStatus().equalsIgnoreCase("Not available") ? 1 : 2);
         pnlVehicle.getRbtnAut().setSelected("AUTOMATIC".equals(vehicle.getTransmission().toString()));
         
         propertySupport.firePropertyChange("Delete", vehicle, null);
+        return pnlVehicle;
+    }
+    
+    private int[] indexSearch(String y, String m1, String m2, String c1, String c2){
+        
+        int[] index = new int[5];
+        int x = 0, a = 0;
+        String[] combo1 = new String[]{y, m1, m2, c1, c2};
+        
+        JsonReader jreader = new JsonReader(new BufferedReader(
+                    new InputStreamReader(getClass().getResourceAsStream("/jsons/vehicleData.json"))
+            ));
+        Type listType = new TypeToken<ArrayList<VehicleSubModel>>(){}.getType();
+        vehicleSubModels = gson.fromJson(jreader, listType);
+
+            List<String> years = vehicleSubModels.stream()
+                    .map(v -> v.getYear())
+                    .collect(Collectors.toList());
+            List<String> makes = vehicleSubModels.stream()
+                    .map(v -> v.getMake()).collect(Collectors.toList());
+            List<String> models = vehicleSubModels.stream()
+                    .map(v -> v.getModel()).collect(Collectors.toList());
+            List<String> colors = vehicleSubModels.stream()
+                    .map(v -> v.getColor()).collect(Collectors.toList());
+
+        Collections.sort(makes);
+        Collections.sort(models);
+        Collections.sort(years);
+        Collections.sort(colors);
+        
+        
+            
+        LinkedList<List<String>> combo = new LinkedList<>();
+        combo.add(years);
+        combo.add(makes);
+        combo.add(models);
+        combo.add(colors);
+        
+        for (List<String> e : combo) {
+            
+            for (String i : e) {
+                
+             if(i.equalsIgnoreCase(combo1[x])){
+                 index[x] = a;
+             }
+             a++;
+            }
+            x++;
+            a = 0;
+        }
+            
+        return index;
     }
 }

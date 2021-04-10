@@ -64,7 +64,7 @@ public class JsonVehicleDaoImpl extends RandomTemplate implements VehicleDao{
 
     @Override
     public boolean delete(Vehicle t) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.        
     }
 
     @Override

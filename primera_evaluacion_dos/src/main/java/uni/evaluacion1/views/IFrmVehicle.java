@@ -108,7 +108,7 @@ public class IFrmVehicle extends javax.swing.JInternalFrame {
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
         dlgVehicle = new DlgVehicle(null, true);
         dlgVehicle.addPropertySupport(pnlViewVehicleController.getTblViewModel());
-        dlgVehicle.setPnlVehicle(new PnlVehicle());
+        dlgVehicle.setPnlVehicleController(new PnlVehicleController(dlgVehicle.getPnlVehicle()));
         dlgVehicle.setVisible(true);
     }//GEN-LAST:event_btnNewActionPerformed
 
@@ -116,12 +116,10 @@ public class IFrmVehicle extends javax.swing.JInternalFrame {
         dlgVehicle = new DlgVehicle(null, true);
         
         if(pnlViewVehicle.getTblViewVehicle().getSelectedRow() >= 0){
-            dlgVehicle.removePropertySupport(pnlViewVehicleController.getTblViewModel());
             dlgVehicle.addPropertySupport(pnlViewVehicleController.getTblViewModel());
-            dlgVehicle.setPnlVehicle(new PnlVehicle());
-            dlgVehicle.setPnlVehicleController(new PnlVehicleController(dlgVehicle.getPnlVehicle()));
+            
             try {
-                dlgVehicle.getPnlVehicleController().updateVehicle(pnlViewVehicle.getTblViewVehicle().getSelectedRow());
+                dlgVehicle.setPnlVehicleController(new PnlVehicleController(dlgVehicle.getPnlVehicleController().updateVehicle(pnlViewVehicle.getTblViewVehicle().getSelectedRow())));
             } catch (IOException ex) {
                 Logger.getLogger(IFrmVehicle.class.getName()).log(Level.SEVERE, null, ex);
             }

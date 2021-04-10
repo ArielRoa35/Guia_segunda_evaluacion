@@ -54,11 +54,6 @@ public class DlgVehicle extends javax.swing.JDialog {
         pnlVehicleController.removePropertyChangeListener(pc1);
     }
     
-    public void updatePnlVehicle(){
-        
-        
-    }
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -88,7 +83,10 @@ public class DlgVehicle extends javax.swing.JDialog {
         );
 
         pnlContent.setLayout(new java.awt.BorderLayout());
-        pnlVehicleController = new PnlVehicleController(pnlVehicle);
+        if(pnlVehicleController == null){
+            pnlVehicle = new PnlVehicle();
+            pnlVehicleController = new PnlVehicleController(pnlVehicle);
+        }
         pnlContent.add(pnlVehicle, BorderLayout.CENTER);
         getContentPane().add(pnlContent, java.awt.BorderLayout.CENTER);
 
