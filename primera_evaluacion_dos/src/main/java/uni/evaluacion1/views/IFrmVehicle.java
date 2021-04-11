@@ -6,6 +6,7 @@
 package uni.evaluacion1.views;
 
 import java.awt.BorderLayout;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,7 +15,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import uni.evaluacion1.controllers.PnlVehicleController;
 import uni.evaluacion1.controllers.PnlViewVehicleController;
-import uni.evaluacion1.views.panels.PnlVehicle;
 import uni.evaluacion1.views.panels.PnlViewVehicle;
 
 /**
@@ -26,6 +26,7 @@ public class IFrmVehicle extends javax.swing.JInternalFrame {
     private PnlViewVehicle pnlViewVehicle;
     private PnlViewVehicleController pnlViewVehicleController;
     private DlgVehicle dlgVehicle;
+    private int index;
     
     /**
      * Creates new form IFrmVehicle
@@ -46,6 +47,15 @@ public class IFrmVehicle extends javax.swing.JInternalFrame {
         return btnUpdate;
     }
     
+    public void addPropertySupport(PropertyChangeListener pc1){
+        
+        pnlViewVehicleController.addPropertyChangeListener(pc1);
+    }
+    
+    public void removePropertySupport(PropertyChangeListener pc1){
+        
+        pnlViewVehicleController.removePropertyChangeListener(pc1);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -108,18 +118,18 @@ public class IFrmVehicle extends javax.swing.JInternalFrame {
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
         dlgVehicle = new DlgVehicle(null, true);
         dlgVehicle.addPropertySupport(pnlViewVehicleController.getTblViewModel());
-        dlgVehicle.setPnlVehicleController(new PnlVehicleController(dlgVehicle.getPnlVehicle()));
         dlgVehicle.setVisible(true);
     }//GEN-LAST:event_btnNewActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         dlgVehicle = new DlgVehicle(null, true);
+        index = pnlViewVehicle.getTblViewVehicle().getSelectedRow();
         
-        if(pnlViewVehicle.getTblViewVehicle().getSelectedRow() >= 0){
+        if(index >= 0){
             dlgVehicle.addPropertySupport(pnlViewVehicleController.getTblViewModel());
             
             try {
-                dlgVehicle.setPnlVehicleController(new PnlVehicleController(dlgVehicle.getPnlVehicleController().updateVehicle(pnlViewVehicle.getTblViewVehicle().getSelectedRow())));
+                dlgVehicle.setPnlVehicleController(new PnlVehicleController(dlgVehicle.getPnlVehicleController().updateVehicle(index)));
             } catch (IOException ex) {
                 Logger.getLogger(IFrmVehicle.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -130,7 +140,18 @@ public class IFrmVehicle extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        // TODO add your handling code here:
+
+        index = pnlViewVehicle.getTblViewVehicle().getSelectedRow();
+        
+        if(index >= 0){
+            try {
+                pnlViewVehicleController.deleteVehicle(index);
+            } catch (IOException ex) {
+                Logger.getLogger(IFrmVehicle.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Debe seleccionar una fila para eliminar.", "Error de seleccion", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
 

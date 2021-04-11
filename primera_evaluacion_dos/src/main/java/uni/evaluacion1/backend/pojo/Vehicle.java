@@ -168,6 +168,48 @@ public class Vehicle {
         return "Vehicle{" + "stockNumber=" + stockNumber + ", year=" + year + ", make=" + make + ", model=" + model + ", style=" + style + ", vin=" + vin + ", exteriorColor=" + exteriorColor + ", interiorColor=" + interiorColor + ", miles=" + miles + ", price=" + price + ", transmission=" + transmission + ", engine=" + engine + ", image=" + image + ", status=" + status + '}';
     }
     
+    public boolean equals(Vehicle v){
+        
+        int i = 0;
+        
+        if(this.stockNumber == v.getStockNumber()){
+        i++;}
+        if(this.year == v.getYear()){
+        i++;}
+        if(this.make.equals(v.getMake())){
+        i++;}
+        if(this.model.equals(v.getModel())){
+        i++;}
+        if(this.style.equals(v.getStyle())){
+        i++;}
+        if(this.vin.equals(v.getVin())){
+        i++;}
+        if(this.interiorColor.equals(v.getInteriorColor())){
+        i++;}
+        if(this.exteriorColor.equals(v.getExteriorColor())){
+        i++;}
+        if(this.miles.equals(v.getMiles())){
+        i++;}
+        if(this.price == v.getPrice()){
+        i++;}
+        if((this.transmission).toString().equals(v.getTransmission().toString())){
+        i++;}
+        if(this.engine.equals(v.getEngine())){
+        i++;}
+        if(this.image.equals(v.getImage())){
+        i++;}
+        if(this.status.equals(v.getStatus())){
+        i++;}
+        
+        if(i == 14){
+            return true;
+        }else{
+            return false;
+        }
+            
+        
+    }
+    
     public Object[] asArray(){
         Object[] obj = new Object[14];
         

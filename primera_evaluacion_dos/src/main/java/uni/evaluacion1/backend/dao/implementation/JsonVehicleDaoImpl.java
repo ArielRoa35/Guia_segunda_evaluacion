@@ -12,10 +12,11 @@ import uni.evaluacion1.backend.pojo.Vehicle;
 
 public class JsonVehicleDaoImpl extends RandomTemplate implements VehicleDao{       
     private final int SIZE = 800;    
-    private Gson gson;    
+    private Gson gson;   
+    private RandomTemplate ranTem;
     
     public JsonVehicleDaoImpl() throws FileNotFoundException {
-        super(new File("vehicleJson.head"), new File("vehicleJson.dat"));        
+        super(new File("vehicleJson.head"), new File("vehicleJson.dat"), new File("vehicleJsonTemp.head"));        
         gson = new Gson();
         
     }    
@@ -64,7 +65,39 @@ public class JsonVehicleDaoImpl extends RandomTemplate implements VehicleDao{
 
     @Override
     public boolean delete(Vehicle t) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.        
+
+        getCustomRandom().getRafH().seek(0);
+        int n = getCustomRandom().getRafH().readInt();
+        int k = getCustomRandom().getRafH().readInt();
+        
+        getCustomRandom().getRafT().seek(0);
+        getCustomRandom().getRafT().writeInt(n-1);
+        getCustomRandom().getRafT().writeInt(k);
+        
+        int j = 0;
+        List<Vehicle> vehicles = (List<Vehicle>) getAll();
+        
+        for (int i = 0; i < n; i++) {
+            
+            long posD = k * SIZE;
+            
+            getCustomRandom().getRafT().seek(posD);
+            getCustomRandom().getRafT().writeInt(++k);
+            
+            if(!vehicles.get(i).equals(t)){
+                getCustomRandom().getRafT().writeUTF(gson.toJson(vehicles.get(i)));
+            }
+        }
+        
+        boolean bandera = false; // :(
+        
+        if(bandera){
+            ranTem.getTempData().renameTo(ranTem.getFileData());
+        }else{
+            System.out.println("No se pudo eliminar el archivo");
+        }
+        
+        return bandera;
     }
 
     @Override
@@ -88,13 +121,17 @@ public class JsonVehicleDaoImpl extends RandomTemplate implements VehicleDao{
             long posD = (id - 1)*SIZE;
             getCustomRandom().getRafD().seek(posD);
             
-            getCustomRandom().getRafD().readInt();                   
+            getCustomRandom().getRafD().readInt();   
+            
+                
+            getCustomRandom().getRafD().seek(posD);
+            getCustomRandom().getRafD().readInt();
             vehicle = gson.fromJson(getCustomRandom().getRafD().readUTF(), Vehicle.class);
+            
             
             vehicles.add(vehicle);            
         }
         
         return vehicles;
     }
-    
 }

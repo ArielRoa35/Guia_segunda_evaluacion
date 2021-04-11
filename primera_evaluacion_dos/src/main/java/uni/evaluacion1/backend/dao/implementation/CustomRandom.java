@@ -9,14 +9,17 @@ public class CustomRandom {
 
     private RandomAccessFile rafH;
     private RandomAccessFile rafD;
+    private RandomAccessFile rafT;
 
-    public CustomRandom(File fileHead, File fileData) throws FileNotFoundException, IOException {
+    public CustomRandom(File fileHead, File fileData, File tempData) throws FileNotFoundException, IOException {
         rafH = new RandomAccessFile(fileHead, "rw");
         rafD = new RandomAccessFile(fileData, "rw");
+        rafT = new RandomAccessFile(tempData, "rw");
 
         if (fileHead.length() == 0) {
             rafH.writeInt(0);
             rafH.writeInt(0);
+            rafT.writeInt(0);
         }
     }
 
@@ -29,6 +32,10 @@ public class CustomRandom {
             rafD.close();
         }
         
+        if(rafT != null){
+            rafT.close();
+        }
+        
     }
     
     public RandomAccessFile getRafH() {
@@ -38,4 +45,10 @@ public class CustomRandom {
     public RandomAccessFile getRafD() {
         return rafD;
     }
+
+    public RandomAccessFile getRafT() {
+        return rafT;
+    }
+    
+    
 }

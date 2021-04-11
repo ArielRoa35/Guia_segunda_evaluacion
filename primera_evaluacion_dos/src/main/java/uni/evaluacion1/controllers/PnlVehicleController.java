@@ -227,7 +227,7 @@ public class PnlVehicleController {
         pnlVehicle.getCmbStatus().setSelectedIndex(vehicle.getStatus().equalsIgnoreCase("active") ? 0 : vehicle.getStatus().equalsIgnoreCase("Not available") ? 1 : 2);
         pnlVehicle.getRbtnAut().setSelected("AUTOMATIC".equals(vehicle.getTransmission().toString()));
         
-        propertySupport.firePropertyChange("Delete", vehicle, null);
+        
         return pnlVehicle;
     }
     
@@ -257,8 +257,6 @@ public class PnlVehicleController {
         Collections.sort(models);
         Collections.sort(years);
         Collections.sort(colors);
-        
-        
             
         LinkedList<List<String>> combo = new LinkedList<>();
         combo.add(years);

@@ -24,13 +24,7 @@ public class ListTableModel extends AbstractTableModel implements PropertyChange
         
         this.data.add(v);
     }
-    
-    public void update (int row, Vehicle v){
-        
-        this.data.set(row, v);
-        
-    }
-    
+
     public void delete (Vehicle v){
         
         this.data.remove(v);
@@ -53,14 +47,15 @@ public class ListTableModel extends AbstractTableModel implements PropertyChange
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-
         
-        delete((Vehicle)evt.getOldValue());
-        System.out.println(evt.getOldValue());
-        fireTableDataChanged();
+        if(evt.getPropertyName().equalsIgnoreCase("vehicle")){
+            add((Vehicle)evt.getNewValue());
+            fireTableDataChanged();
+        }
         
-        add((Vehicle)evt.getNewValue());
-        System.out.println(evt.getNewValue());
-        fireTableDataChanged();
+        if(evt.getPropertyName().equalsIgnoreCase("delete")){
+            delete((Vehicle)evt.getNewValue());
+            fireTableDataChanged();
+        }
     }
 }

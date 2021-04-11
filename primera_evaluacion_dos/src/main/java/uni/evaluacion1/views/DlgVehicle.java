@@ -83,10 +83,8 @@ public class DlgVehicle extends javax.swing.JDialog {
         );
 
         pnlContent.setLayout(new java.awt.BorderLayout());
-        if(pnlVehicleController == null){
-            pnlVehicle = new PnlVehicle();
-            pnlVehicleController = new PnlVehicleController(pnlVehicle);
-        }
+        pnlVehicle = new PnlVehicle();
+        pnlVehicleController = new PnlVehicleController(pnlVehicle);
         pnlContent.add(pnlVehicle, BorderLayout.CENTER);
         getContentPane().add(pnlContent, java.awt.BorderLayout.CENTER);
 
